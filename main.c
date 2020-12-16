@@ -46,5 +46,5 @@ void filter_str(char str[]){
             str[i]=32;
         }
     }
-    str[strlen(str)]="\0";
+    str[strlen(str)+1]="\0";
 }
