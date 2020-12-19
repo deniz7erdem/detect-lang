@@ -30,15 +30,23 @@ void detect_lang();
 
 int main()
 {
-    char metin[50];
+
+    printf("Lutfen metini giriniz:\n");
+    char metin[1000];
     gets(metin);
     filter_str(metin);
-    puts(metin);
+    calculate_frequencies_bi(metin);
+    calculate_frequencies_tri(metin);
+    calculate_distances();
+    detect_lang();
 
     return 0;
 }
 
 void filter_str(char str[]){
+    puts("\n#########################################\n");
+    puts("Metin islenmeye uygun hale getiriliyor...\n");
+    puts("#########################################\n");
     for(int i = 0; i<strlen(str);i++){
         str[i]= tolower(str[i]);
         int c = str[i];
@@ -47,4 +55,96 @@ void filter_str(char str[]){
         }
     }
     str[strlen(str)+1]="\0";
+    puts(str);
+}
+
+void calculate_frequencies_bi(char str[]){
+    puts("\n#########################################\n");
+    puts("Metin taraniyor...\n");
+    puts("#########################################\n");
+    puts("Bigram frekanslari\n");
+    int sayac=0;
+    sayac=sayac+1;
+
+    for(int a=0; a<10;a++){
+
+        for (int i = 0; i < strlen(str); ++i)
+        {
+            if (strncmp (&str[i], matrix_bigram_strings[a], strlen(matrix_bigram_strings)) == 0)
+            {
+
+                calculated_frequencies[a]=calculated_frequencies[a]+1;
+
+                sayac=sayac+1;
+            }
+        }
+    }
+    for (int i = 0; i < 10; i++)
+    {
+        calculated_frequencies[i]=calculated_frequencies[i]/sayac*10;
+        printf("%s bigraminin frekansi %.2f\n", matrix_bigram_strings[i], calculated_frequencies[i]);
+    }
+}
+
+
+void calculate_frequencies_tri(char str[]){
+    puts("\n#########################################\n");
+    puts("Bigram frekanslari\n");
+    int sayac=0;
+    int tri= 10;
+    int yaz=0;
+    sayac=sayac+1;
+
+    for(int a=0; a<10;a++){
+
+        for (int i = 0; i < strlen(str); ++i)
+        {
+            if (strncmp (&str[i], matrix_trigram_strings[a], strlen(matrix_bigram_strings)) == 0)
+            {
+
+                calculated_frequencies[tri]=calculated_frequencies[tri]+1;
+
+                sayac=sayac+1;
+            }
+        }
+        tri++;
+    }
+    for (int i = 10; i < 20; i++)
+    {
+        calculated_frequencies[i]=calculated_frequencies[i]/sayac*10;
+        printf("%s trigraminin frekansi %.2f\n", matrix_trigram_strings[yaz], calculated_frequencies[i]);
+        yaz++;
+    }
+}
+
+//###################################################################################
+//###################################################################################
+//###################################################################################
+void calculate_distances(){
+
+    for(int i=0;i<20;i++){
+
+      distances[0]=distances[0]+fabs(calculated_frequencies[i]-frequency_eng[i]);
+      distances[1]=distances[1]+fabs(calculated_frequencies[i]-frequency_germ[i]);
+    }
+        puts("\n#########################################");
+
+       printf("\nIngilizce ile farki:%f\tAlmanca ile farki:%f",distances[0],distances[1]);
+}
+
+
+void detect_lang(){
+
+    puts("\n#########################################\n");
+
+ if(distances[0]>distances[1]){
+    printf("Girdiginiz metin Almancadir.");
+ }
+ else if(distances[0]<distances[1]){
+    printf("Girdiginiz metin Ingilizcedir.");
+ }
+
+ else{
+    printf("Metin dili tanimlanamadi.");
+ }
 }
