@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1608324684 source:c:\users\derde\desktop\git\detect-lang\main.c
+1608758205 source:c:\users\derde\desktop\git\detect-lang\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
